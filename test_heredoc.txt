@@ -1,5 +1,0 @@
-cat << EOF
-patata pablo
-papa 
-pringles
-EOF
