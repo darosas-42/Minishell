@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_exit.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dreix <darosas-@student.42malaga.com>      +#+  +:+       +#+        */
+/*   By: darosas- <darosas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 17:59:17 by dreix             #+#    #+#             */
-/*   Updated: 2025/11/02 20:25:18 by dreix            ###   ########.fr       */
+/*   Updated: 2025/11/12 20:38:47 by darosas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	ms_exit(t_list *cmd, int *is_exit)
 		ft_putstr_fd("minishell: exit:", 2);
 		ft_putstr_fd(ptr->full_cmd[1], 2);
 		ft_putstr_fd(": numeric argument required\n", 2);
-		return (255);
+		return (2);
 	}
 	else if (ptr->full_cmd[2])
 	{

@@ -1,0 +1,56 @@
+# Suppressions para librerías externas
+{
+   readline_leak_1
+   Memcheck:Leak
+   ...
+   fun:*readline*
+}
+
+{
+   readline_leak_2
+   Memcheck:Leak
+   ...
+   obj:*/libreadline*
+}
+
+{
+   ncurses_leak
+   Memcheck:Leak
+   ...
+   obj:*/libncurses*
+}
+
+{
+   tinfo_leak
+   Memcheck:Leak
+   ...
+   obj:*/libtinfo*
+}
+
+{
+   history_leak
+   Memcheck:Leak
+   ...
+   fun:*history*
+}
+
+{
+   termcap_leak
+   Memcheck:Leak
+   ...
+   fun:*termcap*
+}
+
+{
+   libc_leak
+   Memcheck:Leak
+   ...
+   obj:*/libc-*.so
+}
+
+{
+   dl_leak
+   Memcheck:Leak
+   ...
+   obj:*/ld-*.so
+}

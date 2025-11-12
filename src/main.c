@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dreix <darosas-@student.42malaga.com>      +#+  +:+       +#+        */
+/*   By: darosas- <darosas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 19:17:34 by dreix             #+#    #+#             */
-/*   Updated: 2025/11/10 21:11:30 by dreix            ###   ########.fr       */
+/*   Updated: 2025/11/12 19:30:27 by darosas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ int	main(int argc, char **argv, char **envp)
 		if (!path)
 			str = readline("guest@minishell:$ ");
 		else
-			str = readline(path);
+			str = readline("minishell> ");
 		free(path);
 		if (!check_args(str, &prompt))
 			break ;

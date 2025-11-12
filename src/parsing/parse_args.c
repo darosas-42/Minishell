@@ -26,6 +26,31 @@ extern int	g_status;
  * 
  * Return: Array de strings con argumentos expandidos y divididos
  */
+static char	**filter_empty(char **args)
+{
+	char	**new;
+	int		i;
+	int		j;
+
+	if (!args)
+		return (NULL);
+	new = malloc(sizeof(char *) * (matrixlen(args) + 1));
+	if (!new)
+		return (NULL);
+	i = -1;
+	j = 0;
+	while (args[++i])
+	{
+		if (args[i][0])
+			new[j++] = args[i];
+		else
+			free(args[i]);
+	}
+	new[j] = NULL;
+	free(args);
+	return (new);
+}
+
 static char	**split_all(char **args, t_prompt *prompt)
 {
 	char	**subsplit;
@@ -36,14 +61,14 @@ static char	**split_all(char **args, t_prompt *prompt)
 	while (args && args[++i])
 	{
 		args[i] = expand_vars(args[i], -1, quotes, prompt);
-		args[i] = expand_path(args[i], -1, quotes, \
-			ms_getenv("HOME", prompt->envp, 4));
+		args[i] = expand_path(args[i], -1, quotes,
+				ms_getenv("HOME", prompt->envp, 4));
 		subsplit = ft_cmdsubsplit(args[i], "<|>");
 		ft_matrix_replace_in(&args, subsplit, i);
 		i += matrixlen(subsplit) - 1;
 		free_matrix(subsplit);
 	}
-	return (args);
+	return (filter_empty(args));
 }
 
 /**
@@ -123,8 +148,8 @@ void	*check_args(char *out, t_prompt *p)
 	if (p && p->cmds)
 		n = p->cmds->content;
 	if (p && p->cmds && n && n->full_cmd && ft_lstsize(p->cmds) == 1)
-		p->envp = ms_setenv("_", n->full_cmd[matrixlen(n->full_cmd) - 1], \
-			p->envp, 1);
+		p->envp = ms_setenv("_", n->full_cmd[matrixlen(n->full_cmd) - 1],
+				p->envp, 1);
 	if (p && p->cmds)
 		ft_lstclear(&p->cmds, free_cmd);
 	return (p);

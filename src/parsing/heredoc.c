@@ -15,9 +15,40 @@
 extern int	g_status;
 
 /**
+ * process_here_line - Procesa y acumula una línea del heredoc
+ * @str: Array [línea actual, acumulador de todas las líneas]
+ * @limit: Delimitador que termina el heredoc
+ * 
+ * Verifica si la línea es el delimitador. Si no lo es, añade '\n'
+ * y la concatena al acumulador str[1].
+ * 
+ * Return: 1 si se encontró el delimitador, 0 si no
+ */
+static int	process_here_line(char *str[2], char *limit)
+{
+	char	*temp;
+	size_t	len;
+
+	len = ft_strlen(str[0]);
+	if (ft_strncmp(str[0], limit, len) == 0 && ft_strlen(limit) == len)
+	{
+		free(str[0]);
+		return (1);
+	}
+	temp = str[0];
+	str[0] = ft_strjoin(str[0], "\n");
+	free(temp);
+	temp = str[1];
+	str[1] = ft_strjoin(str[1], str[0]);
+	free(temp);
+	free(str[0]);
+	return (0);
+}
+
+/**
  * get_here_str - Lee líneas hasta encontrar el delimitador
  * @str: Array [línea actual, acumulador de todas las líneas]
- * @len: Longitud de la línea actual
+ * @len: Longitud de la línea actual (no usado)
  * @limit: Delimitador que termina el heredoc (ej: "EOF")
  * @warn: Mensaje de warning si se llega a EOF sin delimitador
  * 
@@ -26,34 +57,24 @@ extern int	g_status;
  * 2. Recibir Ctrl+D (EOF) - muestra warning
  * 3. Recibir Ctrl+C (g_status = 130)
  * 
- * Cada línea se acumula en str[1], añadiendo '\n' al final.
- * El prompt para heredoc es "> " (vs "$ " normal).
- * 
  * Return: String con todas las líneas concatenadas
  */
 static char	*get_here_str(char *str[2], size_t len, char *limit, char *warn)
 {
-	char	*temp;
-
-	while (g_status != 130 && (!str[0] || ft_strncmp(str[0], limit, len) \
-		|| ft_strlen(limit) != len))
+	(void)len;
+	if (!str[1])
+		str[1] = ft_strdup("");
+	while (g_status != 130)
 	{
-		temp = str[1];
-		str[1] = ft_strjoin(str[1], str[0]);
-		free(temp);
-		free(str[0]);
+		if (str[0] && process_here_line(str, limit))
+			break ;
 		str[0] = readline("> ");
 		if (!str[0])
 		{
 			printf("%s (wanted `%s\')\n", warn, limit);
 			break ;
 		}
-		temp = str[0];
-		str[0] = ft_strjoin(str[0], "\n");
-		free(temp);
-		len = ft_strlen(str[0]) - 1;
 	}
-	free(str[0]);
 	return (str[1]);
 }
 

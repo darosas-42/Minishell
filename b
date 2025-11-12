@@ -1,0 +1,15 @@
+a
+b
+file
+include
+Libft
+Makefile
+minishell
+obj
+out
+out1
+out2
+salida
+salida2
+src
+test_heredoc.txt

@@ -85,7 +85,7 @@ char	*ft_strtrim_all(char const *s1, int squote, int dquote)
 	{
 		squote = (squote + (!dquote && s1[i[0]] == '\'')) % 2;
 		dquote = (dquote + (!squote && s1[i[0]] == '\"')) % 2;
-		if ((s1[i[0]] != '\"' || squote) && (s1[i[0]] != '\'' || dquote) \
+		if ((s1[i[0]] != '\"' || squote) && (s1[i[0]] != '\'' || dquote)
 			&& ++i[1] >= 0)
 			trimmed[i[1]] = s1[i[0]];
 		i[0]++;
