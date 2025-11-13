@@ -78,6 +78,7 @@ int		ft_strchars_i(const char *s, const char *set);
 void	free_cmd(void *content);
 void	ft_matrix_replace_in(char ***m, char **replacement, int pos);
 int		is_valid_var_name(char *var);
+char	**bubble_sort(char **matrix);
 char	*get_prompt(t_prompt prompt);
 void	*ms_perror(int err_type, char *param, int err);
 

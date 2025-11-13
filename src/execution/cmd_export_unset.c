@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_export_unset.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: darosas- <darosas-@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: dreix <darosas-@student.42malaga.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 07:30:04 by dreix             #+#    #+#             */
-/*   Updated: 2025/11/12 20:10:53 by darosas-         ###   ########.fr       */
+/*   Updated: 2025/11/13 00:46:01 by dreix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,21 @@ static int	export_var(char *var, char ***envp)
 int	ms_export(t_prompt *prompt)
 {
 	char	**cmd;
+	char	**matrix;
 	int		i;
 	int		exit_code;
 
 	cmd = ((t_mini *)prompt->cmds->content)->full_cmd;
-	if (matrixlen(cmd) < 2)
+	if (matrixlen(cmd) == 1)
+	{
+		matrix = matrix_dup(prompt->envp);
+		matrix = bubble_sort(matrix);
+		i = -1;
+		while (matrix[++i])
+			ft_putendl_fd(matrix[i], 1);
+		free(matrix);
 		return (0);
+	}
 	i = 0;
 	exit_code = 0;
 	while (cmd[++i])

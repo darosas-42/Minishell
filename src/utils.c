@@ -6,7 +6,7 @@
 /*   By: dreix <darosas-@student.42malaga.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 20:53:15 by dreix             #+#    #+#             */
-/*   Updated: 2025/10/30 17:40:27 by dreix            ###   ########.fr       */
+/*   Updated: 2025/11/13 01:23:48 by dreix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,4 +81,29 @@ char	**enlarge_matrix(char **matrix, char *str)
 	if (matrix)
 		free_matrix(matrix);
 	return (new);
+}
+
+char	**bubble_sort(char **matrix)
+{
+	char	*temp;
+	int		i;
+	int		j;
+
+	i = 0;
+	while (matrix && matrix[i] && matrix[i + 1])
+	{
+		j = 0;
+		while (matrix[i][j] == matrix[i + 1][j])
+			j++;
+		if (matrix[i][j] > matrix[i + 1][j])
+		{
+			temp = matrix[i];
+			matrix[i] = matrix[i + 1];
+			matrix[i + 1] = temp;
+			i = 0;
+		}
+		else
+			i++;
+	}
+	return (matrix);
 }
