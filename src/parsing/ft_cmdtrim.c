@@ -3,30 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cmdtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aperez-b <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: pmengiba <pmengiba@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/28 15:28:36 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/13 13:09:37 by aperez-b         ###   ########.fr       */
+/*   Created: 2025/11/17 18:03:59 by pmengiba          #+#    #+#             */
+/*   Updated: 2025/11/17 18:03:59 by pmengiba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/**
- * ft_count_words - Cuenta palabras respetando comillas
- * @s: String a analizar
- * @c: Caracteres delimitadores (ej: espacios)
- * @i: Array con [índice actual, contador de palabras]
- * 
- * Esta función cuenta cuántas palabras hay en el string considerando
- * que las comillas (simples y dobles) agrupan palabras aunque tengan
- * espacios. Por ejemplo: echo "hola mundo" cuenta como 2 palabras.
- * 
- * q[0]: indica si estamos dentro de comillas
- * q[1]: guarda el tipo de comilla que abrió (para cerrar la correcta)
- * 
- * Return: Número de palabras, o -1 si hay comillas sin cerrar
- */
 static int	ft_count_words(const char *s, char *c, int i[2])
 {
 	int		q[2];
@@ -55,22 +40,6 @@ static int	ft_count_words(const char *s, char *c, int i[2])
 	return (i[1]);
 }
 
-/**
- * ft_fill_array - Extrae palabras del string respetando comillas
- * @aux: Array donde guardar las palabras extraídas
- * @s: String fuente
- * @set: Caracteres delimitadores
- * @i: Array [índice actual, inicio palabra, índice destino]
- * 
- * Extrae cada palabra del string y la guarda en el array. Las palabras
- * pueden contener espacios si están entre comillas. Las comillas se
- * mantienen en esta etapa (se eliminan después con ft_strtrim_all).
- * 
- * q[0]: track de comilla simple activa
- * q[1]: track de comilla doble activa
- * 
- * Return: Array rellenado con las palabras
- */
 static char	**ft_fill_array(char **aux, char const *s, char *set, int i[3])
 {
 	int		s_len;
@@ -98,21 +67,6 @@ static char	**ft_fill_array(char **aux, char const *s, char *set, int i[3])
 	return (aux);
 }
 
-/**
- * ft_cmdtrim - Divide string en palabras respetando comillas
- * @s: String a dividir
- * @set: Caracteres delimitadores (normalmente espacios)
- * 
- * Similar a ft_split pero respeta comillas. Los espacios dentro de
- * comillas no separan palabras. Ejemplo:
- * 
- * Input:  echo "hello world" test
- * Output: ["echo", "\"hello world\"", "test", NULL]
- * 
- * Las comillas se mantienen y se eliminan después en fill_nodes.
- * 
- * Return: Array de strings con las palabras, NULL si error o comillas sin cerrar
- */
 char	**ft_cmdtrim(char const *s, char *set)
 {
 	char	**aux;

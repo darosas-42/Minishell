@@ -14,18 +14,6 @@
 
 extern int	g_status;
 
-/**
- * split_all - Expande variables y divide argumentos considerando operadores
- * @args: Array de argumentos a procesar
- * @prompt: Estructura con información del prompt (incluye envp para expansión)
- * 
- * Esta función realiza las siguientes operaciones en orden:
- * 1. Expande variables de entorno ($VAR, $?, $$)
- * 2. Expande el path del home (~)
- * 3. Divide el string en tokens separando operadores (<, |, >)
- * 
- * Return: Array de strings con argumentos expandidos y divididos
- */
 static char	**filter_empty(char **args)
 {
 	char	**new;
@@ -71,20 +59,6 @@ static char	**split_all(char **args, t_prompt *prompt)
 	return (filter_empty(args));
 }
 
-/**
- * parse_args - Parsea argumentos y ejecuta comandos
- * @args: Array de argumentos ya divididos
- * @p: Estructura del prompt con información del shell
- * 
- * Flujo de ejecución:
- * 1. Divide y expande todos los argumentos (split_all)
- * 2. Crea nodos de comandos con redirecciones (fill_nodes)
- * 3. Ejecuta los comandos o builtins (builtin)
- * 4. Espera a que terminen todos los procesos hijos
- * 5. Normaliza el código de salida (g_status)
- * 
- * Return: Puntero al prompt o NULL si se ejecutó exit
- */
 static void	*parse_args(char **args, t_prompt *p)
 {
 	int	is_exit;
@@ -110,22 +84,6 @@ static void	*parse_args(char **args, t_prompt *p)
 	return (p);
 }
 
-/**
- * check_args - Punto de entrada principal del parseo
- * @out: String de entrada leído por readline
- * @p: Estructura del prompt
- * 
- * Esta es la función principal que se llama desde el main después de
- * leer una línea con readline. Realiza:
- * 1. Verifica si hay input (Ctrl+D devuelve NULL)
- * 2. Añade la línea al historial si no está vacía
- * 3. Divide la línea en tokens respetando espacios y comillas (ft_cmdtrim)
- * 4. Llama a parse_args para procesar y ejecutar
- * 5. Actualiza la variable de entorno "_" con el último argumento
- * 6. Libera la memoria de los comandos
- * 
- * Return: Puntero al prompt si continúa, NULL si se debe salir, "" si error
- */
 void	*check_args(char *out, t_prompt *p)
 {
 	char	**a;

@@ -3,28 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim_all.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aperez-b <aperez-b@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pmengiba <pmengiba@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/02 20:59:58 by aperez-b          #+#    #+#             */
-/*   Updated: 2021/11/03 10:11:27 by aperez-b         ###   ########.fr       */
+/*   Created: 2025/11/17 18:04:12 by pmengiba          #+#    #+#             */
+/*   Updated: 2025/11/17 18:04:12 by pmengiba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/**
- * malloc_len - Calcula cuántas comillas hay que eliminar
- * @s1: String a analizar
- * 
- * Cuenta cuántas comillas (simples y dobles) hay en el string que
- * deben eliminarse. Solo cuenta las comillas que están correctamente
- * balanceadas (no las que están dentro de otro tipo de comilla).
- * 
- * Ejemplo: "hola 'mundo'" tiene 4 comillas a eliminar
- *          'it\'s' tendría error (comilla simple sin cerrar)
- * 
- * Return: Número de comillas a eliminar, -1 si hay comillas sin cerrar
- */
 static int	malloc_len(char const *s1)
 {
 	int	count;
@@ -49,24 +36,6 @@ static int	malloc_len(char const *s1)
 	return (count);
 }
 
-/**
- * ft_strtrim_all - Elimina todas las comillas de un string
- * @s1: String del que eliminar comillas
- * @squote: Estado inicial de comilla simple (usar 0)
- * @dquote: Estado inicial de comilla doble (usar 0)
- * 
- * Elimina las comillas externas de un string, dejando el contenido
- * sin comillas. Se usa después de dividir los argumentos para limpiarlos.
- * 
- * Ejemplos:
- * Input:  "hello world"  -> Output: hello world
- * Input:  'test'         -> Output: test
- * Input:  "it's ok"      -> Output: it's ok
- * 
- * Las comillas dentro de otras comillas se preservan como caracteres.
- * 
- * Return: Nuevo string sin comillas, NULL si error o comillas sin cerrar
- */
 char	*ft_strtrim_all(char const *s1, int squote, int dquote)
 {
 	int		count;
