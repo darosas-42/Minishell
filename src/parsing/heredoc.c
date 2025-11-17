@@ -35,7 +35,6 @@ static int	process_here_line(char *str[2], char *limit)
 
 static char	*get_here_str(char *str[2], t_prompt *p, char *limit, char *warn)
 {
-	
 	if (!str[1])
 		str[1] = ft_strdup("");
 	while (p->e_status != 130)
