@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fork_cmds.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dreix <darosas-@student.42malaga.com>      +#+  +:+       +#+        */
+/*   By: darosas- <darosas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 18:19:36 by dreix             #+#    #+#             */
-/*   Updated: 2025/11/04 21:47:58 by dreix            ###   ########.fr       */
+/*   Updated: 2025/11/12 20:31:44 by darosas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,42 +47,48 @@ static void	fork_exec_cmd(t_prompt *prompt, t_list *cmd)
 	signals_default();
 	if (node->full_cmd && !is_builtin(node))
 		execve(node->full_path, node->full_cmd, prompt->envp);
-	else if (node->full_cmd && !ft_strncmp(node->full_cmd[0], "pwd", size) \
+	else if (node->full_cmd && !ft_strncmp(node->full_cmd[0], "pwd", size)
 		&& size == 3)
 		g_status = ms_pwd();
-	else if (node->full_cmd && !ft_strncmp(node->full_cmd[0], "echo", size) \
+	else if (node->full_cmd && !ft_strncmp(node->full_cmd[0], "echo", size)
 		&& size == 4)
 		g_status = ms_echo(cmd);
-	else if (node->full_cmd && !ft_strncmp(node->full_cmd[0], "env", size) \
+	else if (node->full_cmd && !ft_strncmp(node->full_cmd[0], "env", size)
 		&& size == 3)
 		g_status = ms_env(prompt);
 }
 
-int	fork_cmd(t_prompt *prompt, t_list *cmd, int fd[2])
+static void	fork_child_process(t_prompt *prompt, t_list *cmd, int fd[2])
 {
 	t_mini	*n;
-	pid_t	pid;
 
 	n = cmd->content;
 	if (n->infile == -1 || n->outfile == -1)
-		return (0);
+		exit(1);
 	if ((n->full_path && access(n->full_path, X_OK) == 0) || is_builtin(n))
 	{
-		pid = fork();
-		if (pid < 0)
-		{
-			close(fd[FDREAD]);
-			close(fd[FDWRITE]);
-			ms_perror(FORKERROR, NULL, 1);
-		}
-		else if (!pid)
-		{
-			fork_redirec(cmd, fd);
-			close(fd[FDREAD]);
-			fork_exec_cmd(prompt, cmd);
-			ft_lstclear(&prompt->cmds, free_cmd);
-			exit(g_status);
-		}
+		fork_redirec(cmd, fd);
+		close(fd[FDREAD]);
+		fork_exec_cmd(prompt, cmd);
+		ft_lstclear(&prompt->cmds, free_cmd);
+		exit(g_status);
 	}
+	exit(g_status);
+}
+
+int	fork_cmd(t_prompt *prompt, t_list *cmd, int fd[2])
+{
+	pid_t	pid;
+
+	pid = fork();
+	if (pid < 0)
+	{
+		close(fd[FDREAD]);
+		close(fd[FDWRITE]);
+		ms_perror(FORKERROR, NULL, 1);
+		return (0);
+	}
+	else if (!pid)
+		fork_child_process(prompt, cmd, fd);
 	return (1);
 }

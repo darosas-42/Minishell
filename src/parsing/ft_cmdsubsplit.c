@@ -12,21 +12,6 @@
 
 #include "minishell.h"
 
-/**
- * ft_count_words - Cuenta tokens incluyendo los separadores
- * @s: String a analizar
- * @set: Caracteres separadores especiales (ej: "<|>")
- * @count: Contador inicial
- * 
- * A diferencia de ft_cmdtrim, esta función cuenta CADA token,
- * incluyendo los separadores. Por ejemplo:
- * "cat<file" se divide en ["cat", "<", "file"] = 3 palabras
- * 
- * Los separadores se incluyen como tokens individuales SOLO si
- * no están dentro de comillas.
- * 
- * Return: Número total de tokens, -1 si hay comillas sin cerrar
- */
 static int	ft_count_words(char *s, char *set, int count)
 {
 	int		q[2];
@@ -55,23 +40,6 @@ static int	ft_count_words(char *s, char *set, int count)
 	return (count);
 }
 
-/**
- * ft_fill_array - Extrae tokens separando operadores
- * @aux: Array destino para los tokens
- * @s: String fuente
- * @set: Caracteres operadores a separar
- * @i: Array [índice actual, inicio token, índice destino]
- * 
- * Separa cada token del string. Los operadores (<, |, >) se extraen
- * como tokens individuales. Por ejemplo:
- * 
- * Input:  "cat<file|grep test"
- * Output: ["cat", "<", "file", "|", "grep test", NULL]
- * 
- * Los operadores dentro de comillas NO se separan.
- * 
- * Return: Array con todos los tokens
- */
 static char	**ft_fill_array(char **aux, char *s, char *set, int i[3])
 {
 	int		q[2];
@@ -97,22 +65,6 @@ static char	**ft_fill_array(char **aux, char *s, char *set, int i[3])
 	return (aux);
 }
 
-/**
- * ft_cmdsubsplit - Divide string separando operadores de redirección/pipe
- * @s: String a dividir
- * @set: String con operadores a separar (típicamente "<|>")
- * 
- * Esta función es clave para el parseo. Separa los operadores de shell
- * como tokens independientes, pero SOLO si no están dentro de comillas.
- * 
- * Ejemplo de uso en split_all():
- * Input:  "echo hello>file"
- * Output: ["echo hello", ">", "file", NULL]
- * 
- * Esto permite después identificar fácilmente redirecciones y pipes.
- * 
- * Return: Array de tokens, NULL si error o comillas sin cerrar
- */
 char	**ft_cmdsubsplit(char const *s, char *set)
 {
 	char	**aux;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_cd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dreix <darosas-@student.42malaga.com>      +#+  +:+       +#+        */
+/*   By: darosas- <darosas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 04:54:24 by dreix             #+#    #+#             */
-/*   Updated: 2025/11/02 17:31:36 by dreix            ###   ########.fr       */
+/*   Updated: 2025/11/12 20:40:03 by darosas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,23 @@ static void	exec_cd(char **paths, t_prompt *prompt)
 int	ms_cd(t_prompt *prompt)
 {
 	char	**paths;
+	char	**cmds;
 	char	*str;
 
+	cmds = ((t_mini *)prompt->cmds->content)->full_cmd;
+	if (cmds && cmds[1] && cmds[2])
+	{
+		ft_putstr_fd("minishell: cd: too many arguments\n", 2);
+		return (1);
+	}
 	str = ms_getenv("HOME", prompt->envp, 4);
 	if (!str)
 		str = ft_strdup("");
 	paths = enlarge_matrix(NULL, str);
 	free(str);
 	str = getcwd(NULL, 0);
+	if (!str)
+		str = ft_strdup("");
 	paths = enlarge_matrix(paths, str);
 	free(str);
 	exec_cd(paths, prompt);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   full_path_cmd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dreix <darosas-@student.42malaga.com>      +#+  +:+       +#+        */
+/*   By: darosas- <darosas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 20:41:48 by dreix             #+#    #+#             */
-/*   Updated: 2025/11/10 21:24:02 by dreix            ###   ########.fr       */
+/*   Updated: 2025/11/12 20:35:27 by darosas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ static void	*checks_cmd(t_prompt *prompt, t_list *cmd, DIR *dir)
 	char	*path;
 
 	node = cmd->content;
+	matrix = NULL;
 	if (node && node->full_cmd && ft_strchr(*node->full_cmd, '/') && !dir)
 	{
 		matrix = ft_split(node->full_cmd[0], '/');
@@ -86,10 +87,12 @@ void	get_full_path(t_prompt *prompt, t_list *cmd, DIR *dir)
 	if (is_builtin(node))
 		return ;
 	checks_cmd(prompt, cmd, dir);
-	if (node && node->full_cmd && dir)
+	if (node && node->full_cmd && dir && ft_strchr(node->full_cmd[0], '/'))
 		ms_perror(IS_DIR, node->full_cmd[0], 126);
-	else if (node && node->full_path && \
-		!ft_strncmp(node->full_path, "NO_PERM", 7))
+	else if (node && node->full_cmd && dir)
+		ms_perror(NO_CMD, node->full_cmd[0], 127);
+	else if (node && node->full_path
+		&& !ft_strncmp(node->full_path, "NO_PERM", 7))
 		ms_perror(NO_PERM, node->full_cmd[0], 126);
 	else if (node && node->full_path && access(node->full_path, F_OK) == -1)
 		ms_perror(NO_FL, node->full_path, 127);

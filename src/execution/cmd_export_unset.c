@@ -6,7 +6,7 @@
 /*   By: dreix <darosas-@student.42malaga.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 07:30:04 by dreix             #+#    #+#             */
-/*   Updated: 2025/11/10 18:00:25 by dreix            ###   ########.fr       */
+/*   Updated: 2025/11/13 00:46:01 by dreix            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,32 +33,50 @@ static int	find_var(char *var, char **envp, int *j, int unset)
 	return (0);
 }
 
+static int	export_var(char *var, char ***envp)
+{
+	int	j;
+	int	result;
+
+	if (!is_valid_var_name(var))
+	{
+		export_error(var, 1);
+		return (1);
+	}
+	result = find_var(var, *envp, &j, 0);
+	if (result == 1)
+	{
+		free((*envp)[j]);
+		(*envp)[j] = ft_strdup(var);
+	}
+	else if (result == 0)
+		*envp = enlarge_matrix(*envp, var);
+	return (0);
+}
+
 int	ms_export(t_prompt *prompt)
 {
 	char	**cmd;
+	char	**matrix;
 	int		i;
-	int		j;
-	int		result;
+	int		exit_code;
 
 	cmd = ((t_mini *)prompt->cmds->content)->full_cmd;
-	result = matrixlen(cmd);
-	if (result < 2)
-		return (0);
-	i = 0;
-	while (cmd[++i])
+	if (matrixlen(cmd) == 1)
 	{
-		result = find_var(cmd[i], prompt->envp, &j, 0);
-		if (result == 1)
-		{
-			free(prompt->envp[j]);
-			prompt->envp[j] = ft_strdup(cmd[i]);
-		}
-		else if (result == 0)
-			prompt->envp = enlarge_matrix(prompt->envp, cmd[i]);
-		else if (result == 2)
-			export_error(cmd[i], 1);
+		matrix = matrix_dup(prompt->envp);
+		matrix = bubble_sort(matrix);
+		i = -1;
+		while (matrix[++i])
+			ft_putendl_fd(matrix[i], 1);
+		free(matrix);
+		return (0);
 	}
-	return (0);
+	i = 0;
+	exit_code = 0;
+	while (cmd[++i])
+		exit_code |= export_var(cmd[i], &prompt->envp);
+	return (exit_code);
 }
 
 static char	**matrix_dup_but_n(char **matrix, int n)

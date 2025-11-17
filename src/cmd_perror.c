@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_perror.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dreix <darosas-@student.42malaga.com>      +#+  +:+       +#+        */
+/*   By: darosas- <darosas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 21:05:04 by dreix             #+#    #+#             */
-/*   Updated: 2025/11/04 23:21:16 by dreix            ###   ########.fr       */
+/*   Updated: 2025/11/12 20:08:30 by darosas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	export_error(char *param, int err)
 	g_status = err;
 	ft_putstr_fd("minishell: export: `", 2);
 	ft_putstr_fd(param, 2);
-	ft_putstr_fd("': Not a valid identifier", 2);
+	ft_putstr_fd("': not a valid identifier\n", 2);
 }
 
 void	*ms_perror(int err_type, char *param, int err)
@@ -41,7 +41,7 @@ void	*ms_perror(int err_type, char *param, int err)
 	else if (err_type == NO_FL)
 		ft_putendl_fd("No such file or directory", 2);
 	else if (err_type == NO_PERM)
-		ft_putendl_fd("permission denied", 2);
+		ft_putendl_fd("Permission denied", 2);
 	else if (err_type == NO_CMD)
 		ft_putendl_fd("command not found", 2);
 	else if (err_type == DUPERROR)
@@ -55,7 +55,7 @@ void	*ms_perror(int err_type, char *param, int err)
 	else if (err_type == MEMORY)
 		ft_putendl_fd("no memory left on device", 2);
 	else if (err_type == IS_DIR)
-		ft_putendl_fd("IS a directory", 2);
+		ft_putendl_fd("Is a directory", 2);
 	else if (err_type == ISNOT_DIR)
 		ft_putendl_fd("Not a directory", 2);
 	return (NULL);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dreix <darosas-@student.42malaga.com>      +#+  +:+       +#+        */
+/*   By: darosas- <darosas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 16:03:09 by dreix             #+#    #+#             */
-/*   Updated: 2025/11/11 00:15:22 by dreix            ###   ########.fr       */
+/*   Updated: 2025/11/12 20:10:42 by darosas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,4 +91,25 @@ void	ft_matrix_replace_in(char ***m, char **replacement, int pos)
 	new[i[1]] = NULL;
 	free(*m);
 	*m = new;
+}
+
+int	is_valid_var_name(char *var)
+{
+	int	i;
+	int	equal;
+
+	equal = strchr_index(var, '=');
+	if (equal < 0)
+		equal = ft_strlen(var);
+	if (equal == 0)
+		return (0);
+	if (!ft_isalpha(var[0]) && var[0] != '_')
+		return (0);
+	i = 0;
+	while (++i < equal)
+	{
+		if (!ft_isalnum(var[i]) && var[i] != '_')
+			return (0);
+	}
+	return (1);
 }
