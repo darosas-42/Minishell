@@ -6,7 +6,7 @@
 /*   By: darosas- <darosas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 19:33:12 by dreix             #+#    #+#             */
-/*   Updated: 2025/11/17 18:14:44 by darosas-         ###   ########.fr       */
+/*   Updated: 2025/11/17 19:23:58 by darosas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,11 @@ void	signal_sigint(int sig)
 	ioctl(STDIN_FILENO, TIOCSTI, "\n");
 }
 
-void	signals_interactive(void)
+void	signals_interactive(t_prompt *prompt)
 {
 	signal(SIGINT, signal_sigint);
 	signal(SIGQUIT, SIG_IGN);
+	prompt->e_status = g_status;
 }
 
 void	signals_not_interactive(void)

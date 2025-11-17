@@ -6,7 +6,7 @@
 /*   By: darosas- <darosas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 07:30:04 by dreix             #+#    #+#             */
-/*   Updated: 2025/11/17 18:10:59 by darosas-         ###   ########.fr       */
+/*   Updated: 2025/11/17 19:18:54 by darosas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,24 +33,24 @@ static int	find_var(char *var, char **envp, int *j, int unset)
 	return (0);
 }
 
-static int	export_var(char *var, char ***envp)
+static int	export_var(t_prompt *prompt, char *var)
 {
 	int	j;
 	int	result;
 
 	if (!is_valid_var_name(var))
 	{
-		export_error(var, 1);
+		export_error(prompt, var, 1);
 		return (1);
 	}
-	result = find_var(var, *envp, &j, 0);
+	result = find_var(var, prompt->envp, &j, 0);
 	if (result == 1)
 	{
-		free((*envp)[j]);
-		(*envp)[j] = ft_strdup(var);
+		free((prompt->envp)[j]);
+		(prompt->envp)[j] = ft_strdup(var);
 	}
 	else if (result == 0)
-		*envp = enlarge_matrix(*envp, var);
+		prompt->envp = enlarge_matrix(prompt->envp, var);
 	return (0);
 }
 
@@ -78,7 +78,7 @@ int	ms_export(t_prompt *prompt)
 	i = 0;
 	exit_code = 0;
 	while (cmd[++i])
-		exit_code |= export_var(cmd[i], &prompt->envp);
+		exit_code |= export_var(prompt, cmd[i]);
 	return (exit_code);
 }
 

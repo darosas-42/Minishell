@@ -6,13 +6,11 @@
 /*   By: darosas- <darosas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 20:19:49 by dreix             #+#    #+#             */
-/*   Updated: 2025/11/17 18:04:09 by darosas-         ###   ########.fr       */
+/*   Updated: 2025/11/17 19:24:55 by darosas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-extern int	g_status;
 
 int	is_builtin(t_mini *node)
 {
@@ -50,13 +48,13 @@ int	builtin(t_prompt *prompt, t_list *cmd, int *is_exit)
 		if (ptr && ptr[0])
 			i = ft_strlen(*ptr);
 		if (!cmd->next && ptr && !ft_strncmp("cd", *ptr, i) && i == 2)
-			g_status = ms_cd(prompt);
+			prompt->e_status = ms_cd(prompt);
 		else if (!cmd->next && ptr && !ft_strncmp("export", *ptr, i) && i == 6)
-			g_status = ms_export(prompt);
+			prompt->e_status = ms_export(prompt);
 		else if (!cmd->next && ptr && !ft_strncmp("unset", *ptr, i) && i == 5)
-			g_status = ms_unset(prompt);
+			prompt->e_status = ms_unset(prompt);
 		else if (ptr && !ft_strncmp("exit", *ptr, i) && i == 4)
-			g_status = ms_exit(cmd, is_exit);
+			prompt->e_status = ms_exit(cmd, is_exit);
 		else
 		{
 			signals_not_interactive();
@@ -64,5 +62,5 @@ int	builtin(t_prompt *prompt, t_list *cmd, int *is_exit)
 		}
 		cmd = cmd->next;
 	}
-	return (g_status);
+	return (prompt->e_status);
 }

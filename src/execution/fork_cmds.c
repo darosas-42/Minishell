@@ -6,15 +6,13 @@
 /*   By: darosas- <darosas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 18:19:36 by dreix             #+#    #+#             */
-/*   Updated: 2025/11/12 20:31:44 by darosas-         ###   ########.fr       */
+/*   Updated: 2025/11/17 19:26:20 by darosas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-extern int	g_status;
-
-static void	*fork_redirec(t_list *cmd, int fd[2])
+static void	*fork_redirec(t_prompt *prompt, t_list *cmd, int fd[2])
 {
 	t_mini	*node;
 
@@ -22,17 +20,17 @@ static void	*fork_redirec(t_list *cmd, int fd[2])
 	if (node->infile != STDIN_FILENO)
 	{
 		if (dup2(node->infile, STDIN_FILENO) == -1)
-			return (ms_perror(DUPERROR, NULL, 1));
+			return (ms_perror(prompt, DUPERROR, NULL, 1));
 		close(node->infile);
 	}
 	if (node->outfile != STDOUT_FILENO)
 	{
 		if (dup2(node->outfile, STDOUT_FILENO) == -1)
-			return (ms_perror(DUPERROR, NULL, 1));
+			return (ms_perror(prompt, DUPERROR, NULL, 1));
 		close(node->outfile);
 	}
 	else if (cmd->next && dup2(fd[FDWRITE], STDOUT_FILENO) == -1)
-		return (ms_perror(DUPERROR, NULL, 1));
+		return (ms_perror(prompt, DUPERROR, NULL, 1));
 	close(fd[FDWRITE]);
 	return (NULL);
 }
@@ -49,13 +47,13 @@ static void	fork_exec_cmd(t_prompt *prompt, t_list *cmd)
 		execve(node->full_path, node->full_cmd, prompt->envp);
 	else if (node->full_cmd && !ft_strncmp(node->full_cmd[0], "pwd", size)
 		&& size == 3)
-		g_status = ms_pwd();
+		prompt->e_status = ms_pwd();
 	else if (node->full_cmd && !ft_strncmp(node->full_cmd[0], "echo", size)
 		&& size == 4)
-		g_status = ms_echo(cmd);
+		prompt->e_status = ms_echo(cmd);
 	else if (node->full_cmd && !ft_strncmp(node->full_cmd[0], "env", size)
 		&& size == 3)
-		g_status = ms_env(prompt);
+		prompt->e_status = ms_env(prompt);
 }
 
 static void	fork_child_process(t_prompt *prompt, t_list *cmd, int fd[2])
@@ -67,13 +65,13 @@ static void	fork_child_process(t_prompt *prompt, t_list *cmd, int fd[2])
 		exit(1);
 	if ((n->full_path && access(n->full_path, X_OK) == 0) || is_builtin(n))
 	{
-		fork_redirec(cmd, fd);
+		fork_redirec(prompt, cmd, fd);
 		close(fd[FDREAD]);
 		fork_exec_cmd(prompt, cmd);
 		ft_lstclear(&prompt->cmds, free_cmd);
-		exit(g_status);
+		exit(prompt->e_status);
 	}
-	exit(g_status);
+	exit(prompt->e_status);
 }
 
 int	fork_cmd(t_prompt *prompt, t_list *cmd, int fd[2])

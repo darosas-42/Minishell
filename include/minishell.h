@@ -35,6 +35,7 @@ typedef struct s_prompt
 	t_list	*cmds;
 	char	**envp;
 	pid_t	pid;
+	int		e_status;
 }		t_prompt;
 
 typedef struct s_mini
@@ -66,7 +67,7 @@ enum	e_errors
 char	**ms_setenv(char *var, char *str, char **envp, int i);
 char	*ms_getenv(char *var, char **envp, int i);
 void	signal_sigint(int sig);
-void	signals_interactive(void);
+void	signals_interactive(t_prompt *prompt);
 void	signals_not_interactive(void);
 void	signals_default(void);
 char	**enlarge_matrix(char **matrix, char *str);
@@ -80,7 +81,7 @@ void	ft_matrix_replace_in(char ***m, char **replacement, int pos);
 int		is_valid_var_name(char *var);
 char	**bubble_sort(char **matrix);
 char	*get_prompt(t_prompt prompt);
-void	*ms_perror(int err_type, char *param, int err);
+void	*ms_perror(t_prompt *prompt, int err_type, char *param, int err);
 
 // Parsing
 
@@ -108,7 +109,7 @@ int		ms_echo(t_list *cmd);
 int		ms_env(t_prompt *prompt);
 int		ms_pwd(void);
 void	*cmd_others(t_prompt *prompt, t_list *cmd);
-void	export_error(char *param, int err);
+void	export_error(t_prompt *prompt, char *param, int err);
 int		ms_export(t_prompt *prompt);
 int		ms_unset(t_prompt *prompt);
 int		ms_exit(t_list *cmd, int *is_exit);

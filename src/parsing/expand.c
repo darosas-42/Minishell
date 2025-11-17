@@ -12,8 +12,6 @@
 
 #include "minishell.h"
 
-extern int	g_status;
-
 char	*expand_path(char *str, int i, int quotes[2], char *var)
 {
 	char	*path;
@@ -58,7 +56,7 @@ static char	*get_substr_var(char *str, int i, t_prompt *prompt)
 	if (!var && str[i] == '$')
 		var = ft_itoa(prompt->pid);
 	else if (!var && str[i] == '?')
-		var = ft_itoa(g_status);
+		var = ft_itoa(prompt->e_status);
 	else if (!var)
 		var = ft_strdup("");
 	path = ft_strjoin(aux, var);

@@ -6,20 +6,18 @@
 /*   By: darosas- <darosas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 04:54:24 by dreix             #+#    #+#             */
-/*   Updated: 2025/11/17 18:40:26 by darosas-         ###   ########.fr       */
+/*   Updated: 2025/11/17 19:24:52 by darosas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-extern int	g_status;
 
 static void	exec_cd(char **paths, t_prompt *prompt, int result)
 {
 	DIR		*dir;
 	char	**cmds;
 
-	g_status = 0;
+	prompt->e_status = 0;
 	dir = NULL;
 	cmds = ((t_mini *)prompt->cmds->content)->full_cmd;
 	if (cmds && cmds[1])
@@ -29,7 +27,7 @@ static void	exec_cd(char **paths, t_prompt *prompt, int result)
 	if (!cmds[1] && paths[0])
 		result = chdir(paths[0]);
 	if (result == -1)
-		g_status = 1;
+		prompt->e_status = 1;
 	if (cmds[1] && dir && (access(cmds[1], F_OK) == 0))
 		chdir(cmds[1]);
 	else if (cmds[1] && (access(cmds[1], F_OK) == -1))
@@ -52,7 +50,7 @@ static void	ms_cd_aux(t_prompt *prompt, char ***paths)
 	*paths = enlarge_matrix(*paths, str);
 	free(str);
 	exec_cd(*paths, prompt, 0);
-	if (g_status == 0)
+	if (prompt->e_status == 0)
 		prompt->envp = ms_setenv("OLDPWD", *paths[1], prompt->envp, 6);
 }
 
@@ -80,5 +78,5 @@ int	ms_cd(t_prompt *prompt)
 	prompt->envp = ms_setenv("PWD", str, prompt->envp, 3);
 	free(str);
 	free_matrix(paths);
-	return (g_status);
+	return (prompt->e_status);
 }

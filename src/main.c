@@ -6,7 +6,7 @@
 /*   By: darosas- <darosas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 19:17:34 by dreix             #+#    #+#             */
-/*   Updated: 2025/11/12 21:22:25 by darosas-         ###   ########.fr       */
+/*   Updated: 2025/11/17 19:22:29 by darosas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	ms_getpid(t_prompt *prompt)
 	pid = fork();
 	if (pid < 0)
 	{
-		ms_perror(FORKERROR, NULL, 1);
+		ms_perror(prompt, FORKERROR, NULL, 1);
 		free_matrix(prompt->envp);
 		exit(1);
 	}
@@ -67,11 +67,12 @@ static t_prompt	init_struct(char **argv, char **envp)
 	t_prompt	prompt;
 
 	g_status = 0;
+	prompt.e_status = 0;
 	prompt.cmds = NULL;
 	prompt.envp = matrix_dup(envp);
 	if (!prompt.envp)
 	{
-		ms_perror(MEMORY, NULL, 1);
+		ms_perror(&prompt, MEMORY, NULL, 1);
 		exit(1);
 	}
 	ms_getpid(&prompt);
@@ -88,7 +89,7 @@ int	main(int argc, char **argv, char **envp)
 	prompt = init_struct(argv, envp);
 	while (argc)
 	{
-		signals_interactive();
+		signals_interactive(&prompt);
 		path = get_prompt(prompt);
 		if (!path)
 			str = readline("guest@minishell:$ ");
@@ -99,5 +100,5 @@ int	main(int argc, char **argv, char **envp)
 			break ;
 	}
 	free_matrix(prompt.envp);
-	return (g_status);
+	return (prompt.e_status);
 }

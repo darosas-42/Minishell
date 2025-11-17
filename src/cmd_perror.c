@@ -6,13 +6,11 @@
 /*   By: darosas- <darosas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 21:05:04 by dreix             #+#    #+#             */
-/*   Updated: 2025/11/17 18:46:15 by darosas-         ###   ########.fr       */
+/*   Updated: 2025/11/17 19:24:38 by darosas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-extern int	g_status;
 
 static void	aux_msperror(char *param)
 {
@@ -24,17 +22,17 @@ static void	aux_msperror(char *param)
 	}
 }
 
-void	export_error(char *param, int err)
+void	export_error(t_prompt *prompt, char *param, int err)
 {
-	g_status = err;
+	prompt->e_status = err;
 	ft_putstr_fd("minishell: export: `", 2);
 	ft_putstr_fd(param, 2);
 	ft_putstr_fd("': not a valid identifier\n", 2);
 }
 
-void	*ms_perror(int err_type, char *param, int err)
+void	*ms_perror(t_prompt *prompt, int err_type, char *param, int err)
 {
-	g_status = err;
+	prompt->e_status = err;
 	aux_msperror(param);
 	if (err_type == QUOTERROR)
 		ft_putendl_fd("error while looking for matching quote", 2);
