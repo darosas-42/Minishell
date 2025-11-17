@@ -26,29 +26,29 @@ static t_mini	*mini_init(void)
 	return (mini);
 }
 
-static t_mini	*get_params(t_mini *node, char **a[2], int *i)
+static t_mini	*get_params(t_mini *node, char **a[2], int *i, t_prompt *prompt)
 {
 	if (a[0][*i])
 	{
 		if (a[0][*i][0] == '>' && a[0][*i + 1] && a[0][*i + 1][0] == '>')
-			node = get_outfile2(node, a[1], i);
+			node = get_outfile2(node, a[1], i, prompt);
 		else if (a[0][*i][0] == '>')
-			node = get_outfile1(node, a[1], i);
+			node = get_outfile1(node, a[1], i, prompt);
 		else if (a[0][*i][0] == '<' && a[0][*i + 1]
 			&& a[0][*i + 1][0] == '<')
-			node = get_infile2(node, a[1], i);
+			node = get_infile2(node, a[1], i, prompt);
 		else if (a[0][*i][0] == '<')
-			node = get_infile1(node, a[1], i);
+			node = get_infile1(node, a[1], i, prompt);
 		else if (a[0][*i][0] != '|' && a[1][*i][0])
 			node->full_cmd = enlarge_matrix(node->full_cmd, a[1][*i]);
 		else if (a[0][*i][0] == '|')
 		{
-			ms_perror(PIPENDERROR, NULL, 2);
+			ms_perror(prompt, PIPENDERROR, NULL, 2);
 			*i = -2;
 		}
 		return (node);
 	}
-	ms_perror(PIPENDERROR, NULL, 2);
+	ms_perror(prompt, PIPENDERROR, NULL, 2);
 	*i = -2;
 	return (node);
 }
@@ -78,7 +78,7 @@ static t_list	*stop_fill(t_list *cmds, char **args, char **temp)
 	return (NULL);
 }
 
-t_list	*fill_nodes(char **args, int i)
+t_list	*fill_nodes(char **args, int i, t_prompt *prompt)
 {
 	t_list	*cmds[2];
 	char	**temp[2];
@@ -96,7 +96,7 @@ t_list	*fill_nodes(char **args, int i)
 			cmds[1] = ft_lstlast(cmds[0]);
 		}
 		temp[0] = args;
-		cmds[1]->content = get_params(cmds[1]->content, temp, &i);
+		cmds[1]->content = get_params(cmds[1]->content, temp, &i, prompt);
 		if (i < 0)
 			return (stop_fill(cmds[0], args, temp[1]));
 		if (!args[i])

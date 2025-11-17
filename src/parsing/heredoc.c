@@ -12,8 +12,6 @@
 
 #include "minishell.h"
 
-extern int	g_status;
-
 static int	process_here_line(char *str[2], char *limit)
 {
 	char	*temp;
@@ -35,12 +33,12 @@ static int	process_here_line(char *str[2], char *limit)
 	return (0);
 }
 
-static char	*get_here_str(char *str[2], size_t len, char *limit, char *warn)
+static char	*get_here_str(char *str[2], t_prompt *p, char *limit, char *warn)
 {
-	(void)len;
+	
 	if (!str[1])
 		str[1] = ft_strdup("");
-	while (g_status != 130)
+	while (p->e_status != 130)
 	{
 		if (str[0] && process_here_line(str, limit))
 			break ;
@@ -54,21 +52,21 @@ static char	*get_here_str(char *str[2], size_t len, char *limit, char *warn)
 	return (str[1]);
 }
 
-int	get_here_doc(char *str[2], char *aux[2])
+int	get_here_doc(char *str[2], char *aux[2], t_prompt *prompt)
 {
 	int		fd[2];
 
-	g_status = 0;
+	prompt->e_status = 0;
 	if (pipe(fd) == -1)
 	{
-		ms_perror(PIPERROR, NULL, 1);
+		ms_perror(prompt, PIPERROR, NULL, 1);
 		return (-1);
 	}
-	str[1] = get_here_str(str, 0, aux[0], aux[1]);
+	str[1] = get_here_str(str, prompt, aux[0], aux[1]);
 	write(fd[FDWRITE], str[1], ft_strlen(str[1]));
 	free(str[1]);
 	close(fd[FDWRITE]);
-	if (g_status == 130)
+	if (prompt->e_status == 130)
 	{
 		close(fd[FDREAD]);
 		return (-1);

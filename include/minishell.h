@@ -87,16 +87,16 @@ void	*ms_perror(t_prompt *prompt, int err_type, char *param, int err);
 
 char	*expand_vars(char *str, int i, int quotes[2], t_prompt *prompt);
 char	*expand_path(char *str, int i, int quotes[2], char *var);
-t_list	*fill_nodes(char **args, int i);
+t_list	*fill_nodes(char **args, int i, t_prompt *prompt);
 char	**ft_cmdsubsplit(char const *s, char *set);
 char	**ft_cmdtrim(char const *s, char *set);
 char	*ft_strtrim_all(char const *s1, int squote, int dquote);
-t_mini	*get_infile2(t_mini *node, char **args, int *i);
-t_mini	*get_infile1(t_mini *node, char **args, int *i);
-t_mini	*get_outfile2(t_mini *node, char **args, int *i);
-t_mini	*get_outfile1(t_mini *node, char **args, int *i);
-int		get_fd(int oldfd, char *path, int flags[2]);
-int		get_here_doc(char *str[2], char *aux[2]);
+t_mini	*get_infile2(t_mini *node, char **args, int *i, t_prompt *prompt);
+t_mini	*get_infile1(t_mini *node, char **args, int *i, t_prompt *prompt);
+t_mini	*get_outfile2(t_mini *node, char **args, int *i, t_prompt *prompt);
+t_mini	*get_outfile1(t_mini *node, char **args, int *i, t_prompt *prompt);
+int		get_fd(int oldfd, char *path, int flags[2], t_prompt *prompt);
+int		get_here_doc(char *str[2], char *aux[2], t_prompt *prompt);
 void	*check_args(char *out, t_prompt *p);
 
 // Execution

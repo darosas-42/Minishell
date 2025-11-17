@@ -12,8 +12,6 @@
 
 #include "minishell.h"
 
-extern int	g_status;
-
 static char	**filter_empty(char **args)
 {
 	char	**new;
@@ -65,17 +63,17 @@ static void	*parse_args(char **args, t_prompt *p)
 	int	i;
 
 	is_exit = 0;
-	p->cmds = fill_nodes(split_all(args, p), -1);
+	p->cmds = fill_nodes(split_all(args, p), -1, p);
 	if (!p->cmds)
 		return (p);
 	i = ft_lstsize(p->cmds);
-	g_status = builtin(p, p->cmds, &is_exit);
+	p->e_status = builtin(p, p->cmds, &is_exit);
 	while (i-- > 0)
-		waitpid(-1, &g_status, 0);
-	if (!is_exit && g_status == 13)
-		g_status = 0;
-	if (g_status > 255)
-		g_status = g_status / 255;
+		waitpid(-1, p->e_status, 0);
+	if (!is_exit && p->e_status == 13)
+		p->e_status = 0;
+	if (p->e_status > 255)
+		p->e_status = p->e_status / 255;
 	if (args && is_exit)
 	{
 		ft_lstclear(&p->cmds, free_cmd);
@@ -99,7 +97,7 @@ void	*check_args(char *out, t_prompt *p)
 	a = ft_cmdtrim(out, " ");
 	free(out);
 	if (!a)
-		ms_perror(QUOTERROR, NULL, 1);
+		ms_perror(p, QUOTERROR, NULL, 1);
 	if (!a)
 		return ("");
 	p = parse_args(a, p);
