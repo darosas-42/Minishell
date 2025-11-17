@@ -6,7 +6,7 @@
 /*   By: darosas- <darosas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 20:41:48 by dreix             #+#    #+#             */
-/*   Updated: 2025/11/17 18:28:09 by darosas-         ###   ########.fr       */
+/*   Updated: 2025/11/17 19:35:18 by darosas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,12 +66,12 @@ static void	*checks_cmd(t_prompt *prompt, t_list *cmd, DIR *dir, char **matrix)
 	{
 		path = ms_getenv("PATH", prompt->envp, 4);
 		if (!path)
-			return (ms_perror(NO_FL, node->full_cmd[0], 1));
+			return (ms_perror(prompt, NO_FL, node->full_cmd[0], 1));
 		matrix = ft_split(path, ':');
 		free(path);
 		node->full_path = get_not_builtin(matrix, node, NULL);
 		if (!node->full_path || !node->full_cmd[0] || !node->full_cmd[0][0])
-			ms_perror(NO_CMD, node->full_cmd[0], 127);
+			ms_perror(prompt, NO_CMD, node->full_cmd[0], 127);
 	}
 	free_matrix(matrix);
 	return (NULL);
@@ -86,14 +86,14 @@ void	get_full_path(t_prompt *prompt, t_list *cmd, DIR *dir)
 		return ;
 	checks_cmd(prompt, cmd, dir, NULL);
 	if (node && node->full_cmd && dir && ft_strchr(node->full_cmd[0], '/'))
-		ms_perror(IS_DIR, node->full_cmd[0], 126);
+		ms_perror(prompt, IS_DIR, node->full_cmd[0], 126);
 	else if (node && node->full_cmd && dir)
-		ms_perror(NO_CMD, node->full_cmd[0], 127);
+		ms_perror(prompt, NO_CMD, node->full_cmd[0], 127);
 	else if (node && node->full_path
 		&& !ft_strncmp(node->full_path, "NO_PERM", 7))
-		ms_perror(NO_PERM, node->full_cmd[0], 126);
+		ms_perror(prompt, NO_PERM, node->full_cmd[0], 126);
 	else if (node && node->full_path && access(node->full_path, F_OK) == -1)
-		ms_perror(NO_FL, node->full_path, 127);
+		ms_perror(prompt, NO_FL, node->full_path, 127);
 	else if (node && node->full_path && access(node->full_path, X_OK) == -1)
-		ms_perror(NO_PERM, node->full_path, 126);
+		ms_perror(prompt, NO_PERM, node->full_path, 126);
 }

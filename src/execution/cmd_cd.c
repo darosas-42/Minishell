@@ -6,7 +6,7 @@
 /*   By: darosas- <darosas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 04:54:24 by dreix             #+#    #+#             */
-/*   Updated: 2025/11/17 19:24:52 by darosas-         ###   ########.fr       */
+/*   Updated: 2025/11/17 19:30:05 by darosas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,11 @@ static void	exec_cd(char **paths, t_prompt *prompt, int result)
 	if (cmds[1] && dir && (access(cmds[1], F_OK) == 0))
 		chdir(cmds[1]);
 	else if (cmds[1] && (access(cmds[1], F_OK) == -1))
-		ms_perror(NO_FL, cmds[1], 1);
+		ms_perror(prompt, NO_FL, cmds[1], 1);
 	else if (cmds[1] && (access(cmds[1], X_OK) == -1))
-		ms_perror(NO_PERM, cmds[1], 1);
+		ms_perror(prompt, NO_PERM, cmds[1], 1);
 	else if (cmds[1])
-		ms_perror(ISNOT_DIR, cmds[1], 1);
+		ms_perror(prompt, ISNOT_DIR, cmds[1], 1);
 	if (dir)
 		closedir(dir);
 }

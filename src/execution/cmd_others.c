@@ -6,7 +6,7 @@
 /*   By: darosas- <darosas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 20:30:47 by dreix             #+#    #+#             */
-/*   Updated: 2025/11/17 18:03:59 by darosas-         ###   ########.fr       */
+/*   Updated: 2025/11/17 19:32:04 by darosas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	*cmd_others(t_prompt *prompt, t_list *cmd)
 	if (pipe(fd) == -1)
 	{
 		cmd_others_cleanup(dir, fd, 0);
-		return (ms_perror(PIPERROR, NULL, 1));
+		return (ms_perror(prompt, PIPERROR, NULL, 1));
 	}
 	if (!fork_cmd(prompt, cmd, fd))
 	{
