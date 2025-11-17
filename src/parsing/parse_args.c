@@ -69,7 +69,7 @@ static void	*parse_args(char **args, t_prompt *p)
 	i = ft_lstsize(p->cmds);
 	p->e_status = builtin(p, p->cmds, &is_exit);
 	while (i-- > 0)
-		waitpid(-1, p->e_status, 0);
+		waitpid(-1, &p->e_status, 0);
 	if (!is_exit && p->e_status == 13)
 		p->e_status = 0;
 	if (p->e_status > 255)

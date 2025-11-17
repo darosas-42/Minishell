@@ -6,7 +6,7 @@
 /*   By: darosas- <darosas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 18:19:36 by dreix             #+#    #+#             */
-/*   Updated: 2025/11/17 19:26:20 by darosas-         ###   ########.fr       */
+/*   Updated: 2025/11/17 20:10:13 by darosas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,21 +56,31 @@ static void	fork_exec_cmd(t_prompt *prompt, t_list *cmd)
 		prompt->e_status = ms_env(prompt);
 }
 
+static void	free_child_process(t_prompt *prompt)
+{
+	ft_lstclear(&prompt->cmds, free_cmd);
+	free_matrix(prompt->envp);
+}
+
 static void	fork_child_process(t_prompt *prompt, t_list *cmd, int fd[2])
 {
 	t_mini	*n;
 
 	n = cmd->content;
 	if (n->infile == -1 || n->outfile == -1)
+	{
+		free_child_process(prompt);
 		exit(1);
+	}
 	if ((n->full_path && access(n->full_path, X_OK) == 0) || is_builtin(n))
 	{
 		fork_redirec(prompt, cmd, fd);
 		close(fd[FDREAD]);
 		fork_exec_cmd(prompt, cmd);
-		ft_lstclear(&prompt->cmds, free_cmd);
+		free_child_process(prompt);
 		exit(prompt->e_status);
 	}
+	free_child_process(prompt);
 	exit(prompt->e_status);
 }
 
@@ -83,7 +93,7 @@ int	fork_cmd(t_prompt *prompt, t_list *cmd, int fd[2])
 	{
 		close(fd[FDREAD]);
 		close(fd[FDWRITE]);
-		ms_perror(FORKERROR, NULL, 1);
+		ms_perror(prompt, FORKERROR, NULL, 1);
 		return (0);
 	}
 	else if (!pid)
