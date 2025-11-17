@@ -6,7 +6,7 @@
 /*   By: darosas- <darosas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 04:54:24 by dreix             #+#    #+#             */
-/*   Updated: 2025/11/17 18:35:05 by darosas-         ###   ########.fr       */
+/*   Updated: 2025/11/17 18:40:26 by darosas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,10 @@
 
 extern int	g_status;
 
-static void	exec_cd(char **paths, t_prompt *prompt)
+static void	exec_cd(char **paths, t_prompt *prompt, int result)
 {
 	DIR		*dir;
 	char	**cmds;
-	int		result;
 
 	g_status = 0;
 	dir = NULL;
@@ -52,7 +51,7 @@ static void	ms_cd_aux(t_prompt *prompt, char ***paths)
 		str = ft_strdup("");
 	*paths = enlarge_matrix(*paths, str);
 	free(str);
-	exec_cd(*paths, prompt);
+	exec_cd(*paths, prompt, 0);
 	if (g_status == 0)
 		prompt->envp = ms_setenv("OLDPWD", *paths[1], prompt->envp, 6);
 }
