@@ -6,7 +6,7 @@
 /*   By: darosas- <darosas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 20:41:48 by dreix             #+#    #+#             */
-/*   Updated: 2025/11/12 20:35:27 by darosas-         ###   ########.fr       */
+/*   Updated: 2025/11/17 18:28:09 by darosas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,12 @@ static char	*get_not_builtin(char **matrix, t_mini *node, char *tmp)
 	return (node->full_path);
 }
 
-static void	*checks_cmd(t_prompt *prompt, t_list *cmd, DIR *dir)
+static void	*checks_cmd(t_prompt *prompt, t_list *cmd, DIR *dir, char **matrix)
 {
 	t_mini	*node;
-	char	**matrix;
 	char	*path;
 
 	node = cmd->content;
-	matrix = NULL;
 	if (node && node->full_cmd && ft_strchr(*node->full_cmd, '/') && !dir)
 	{
 		matrix = ft_split(node->full_cmd[0], '/');
@@ -86,7 +84,7 @@ void	get_full_path(t_prompt *prompt, t_list *cmd, DIR *dir)
 	node = cmd->content;
 	if (is_builtin(node))
 		return ;
-	checks_cmd(prompt, cmd, dir);
+	checks_cmd(prompt, cmd, dir, NULL);
 	if (node && node->full_cmd && dir && ft_strchr(node->full_cmd[0], '/'))
 		ms_perror(IS_DIR, node->full_cmd[0], 126);
 	else if (node && node->full_cmd && dir)

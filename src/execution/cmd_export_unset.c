@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_export_unset.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dreix <darosas-@student.42malaga.com>      +#+  +:+       +#+        */
+/*   By: darosas- <darosas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 07:30:04 by dreix             #+#    #+#             */
-/*   Updated: 2025/11/13 00:46:01 by dreix            ###   ########.fr       */
+/*   Updated: 2025/11/17 18:10:59 by darosas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,10 @@ int	ms_export(t_prompt *prompt)
 		matrix = bubble_sort(matrix);
 		i = -1;
 		while (matrix[++i])
+		{
+			ft_putstr_fd("declare -x ", 1);
 			ft_putendl_fd(matrix[i], 1);
+		}
 		free(matrix);
 		return (0);
 	}

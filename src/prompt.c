@@ -6,7 +6,7 @@
 /*   By: darosas- <darosas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 08:56:22 by dreix             #+#    #+#             */
-/*   Updated: 2025/11/12 21:44:45 by darosas-         ###   ########.fr       */
+/*   Updated: 2025/11/17 18:06:18 by darosas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static char	*get_home(t_prompt prompt)
 	return (pwd);
 }
 
-static char	*aux_whoami_gnl(int	fd)
+static char	*aux_whoami_gnl(int fd)
 {
 	char	*str;
 	char	*temp;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dreix <darosas-@student.42malaga.com>      +#+  +:+       +#+        */
+/*   By: darosas- <darosas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 19:33:12 by dreix             #+#    #+#             */
-/*   Updated: 2025/10/27 19:02:40 by dreix            ###   ########.fr       */
+/*   Updated: 2025/11/17 18:14:44 by darosas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,10 @@ void	signal_sigint(int sig)
 {
 	(void)sig;
 	g_status = 130;
+	write(STDOUT_FILENO, "\n", 1);
 	rl_replace_line("", 0);
 	rl_on_new_line();
+	rl_redisplay();
 	ioctl(STDIN_FILENO, TIOCSTI, "\n");
 }
 

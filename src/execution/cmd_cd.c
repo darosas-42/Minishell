@@ -6,7 +6,7 @@
 /*   By: darosas- <darosas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 04:54:24 by dreix             #+#    #+#             */
-/*   Updated: 2025/11/12 20:40:03 by darosas-         ###   ########.fr       */
+/*   Updated: 2025/11/17 18:35:05 by darosas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,20 @@ static void	exec_cd(char **paths, t_prompt *prompt)
 		closedir(dir);
 }
 
+static void	ms_cd_aux(t_prompt *prompt, char ***paths)
+{
+	char	*str;
+
+	str = getcwd(NULL, 0);
+	if (!str)
+		str = ft_strdup("");
+	*paths = enlarge_matrix(*paths, str);
+	free(str);
+	exec_cd(*paths, prompt);
+	if (g_status == 0)
+		prompt->envp = ms_setenv("OLDPWD", *paths[1], prompt->envp, 6);
+}
+
 int	ms_cd(t_prompt *prompt)
 {
 	char	**paths;
@@ -60,14 +74,7 @@ int	ms_cd(t_prompt *prompt)
 		str = ft_strdup("");
 	paths = enlarge_matrix(NULL, str);
 	free(str);
-	str = getcwd(NULL, 0);
-	if (!str)
-		str = ft_strdup("");
-	paths = enlarge_matrix(paths, str);
-	free(str);
-	exec_cd(paths, prompt);
-	if (g_status == 0)
-		prompt->envp = ms_setenv("OLDPWD", paths[1], prompt->envp, 6);
+	ms_cd_aux(prompt, &paths);
 	str = getcwd(NULL, 0);
 	if (!str)
 		str = ft_strdup("");
